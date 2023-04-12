@@ -1,0 +1,3 @@
+Flask==2.2.3
+uwsgitop==0.11
+gevent==22.10.2

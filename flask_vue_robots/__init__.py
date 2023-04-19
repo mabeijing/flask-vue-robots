@@ -11,6 +11,9 @@ app = Flask(__name__, static_folder='../static', static_url_path='/images', temp
 app.register_blueprint(bp_l10n)
 
 
+@app.get("/")
+def index():
+    return "welcome to Hello World!"
 
 @app.errorhandler(Exception)
 def error_handle(e):

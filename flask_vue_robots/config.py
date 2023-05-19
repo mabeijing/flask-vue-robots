@@ -1,4 +1,5 @@
 from flask import Config
+from sqlalchemy import URL
 
 
 class AbstractConfig(Config):
@@ -16,7 +17,41 @@ class DevelopConfig(AbstractConfig):
     DEBUG = True
     EXPLAIN_TEMPLATE_LOADING = True
     MAX_COOKIE_SIZE = 4096
-    pass
+
+    """
+    Flask-SQLAlchemy相关的配置
+    - :data:`.SQLALCHEMY_DATABASE_URI`
+    - :data:`.SQLALCHEMY_ENGINE_OPTIONS`
+    - :data:`.SQLALCHEMY_ECHO`
+    - :data:`.SQLALCHEMY_BINDS`
+    - :data:`.SQLALCHEMY_RECORD_QUERIES`
+    - :data:`.SQLALCHEMY_TRACK_MODIFICATIONS`
+    """
+    SQLALCHEMY_DATABASE_URI = URL.create(
+        drivername="mysql+pymysql",
+        username="root",
+        password="root@123",
+        host="localhost",
+        port=3306,
+        database="flask-vue-robots",
+    )
+    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_BINDS = {
+        "db1": URL.create(
+            drivername="mysql+pymysql",
+            username="root",
+            password="root@123",
+            host="localhost",
+            port=3306,
+            database="flask-vue-robots"),
+        "db2": URL.create(
+            drivername="mysql+pymysql",
+            username="root",
+            password="root@123",
+            host="localhost",
+            port=3306,
+            database="tms_db")
+    }
 
 
 class ProductionConfig(AbstractConfig):

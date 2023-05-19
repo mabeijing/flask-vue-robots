@@ -1,5 +1,5 @@
 from l10n import bp_l10n
-
+from flask_vue_robots.orm.db_model import TBUser, db
 
 
 @bp_l10n.get("/")
@@ -10,3 +10,10 @@ def rules():
     # 2 直接用jinja2
     return '<script>alert("bad")</script>'
 
+
+@bp_l10n.get("/add_rule/<rule_name>")
+def add_rule(rule_name):
+    tf_user = TBUser(username=rule_name, email='58149278@qq.com')
+    db.session.add(tf_user)
+    db.session.commit()
+    return "OK"

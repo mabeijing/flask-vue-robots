@@ -51,7 +51,7 @@ loggers:
         propagate: false    # 日志向上传递，不仅在myapp中记录，也会在父logger中记录
 
     sqlalchemy:
-        level: DEBUG
+        level: INFO
         handlers: [ consoleHandle,rotateFileHandle,timeRotateFileHandle ]
         propagate: false    # 日志向上传递，不仅在myapp中记录，也会在父logger中记录
 

@@ -1,0 +1,65 @@
+version: 1
+disable_existing_loggers: false
+formatters:
+    default:
+        format: "[%(asctime)-40s] - [%(name)40s] - %(levelname)s - %(message)s" # 注意左对齐和右对齐，
+
+    pycharmFormat:
+        format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+    colorFormat: # 配合colorlog模块，给控制台进行颜色打印
+        (): colorlog.ColoredFormatter
+        format: "%(log_color)s%(asctime)s%(reset)s - %(bold)s%(name)s%(reset)s - %(log_color)s%(levelname)-8s%(reset)s - %(log_color)s%(message)s%(reset)s"
+        log_colors:
+            DEBUG: bold_white
+            INFO: bold_green
+            WARNING: bold_yellow
+            ERROR: bold_red
+            CRITICAL: bold_purple
+
+handlers:
+    consoleHandle: # 控制台日志，INFO级别
+        class: logging.StreamHandler
+        level: DEBUG
+        formatter: colorFormat
+        stream: ext://sys.stdout
+    #        filters: debug
+
+    rotateFileHandle: # 根据大小拆分log。
+        class: logging.handlers.RotatingFileHandler
+        mode: "a+"
+        level: ERROR
+        formatter: pycharmFormat
+        filename: ./flask_vue_robots/logs/error.log    # 就是在启动项目的文件夹的相对路径
+        maxBytes: 104857600 # 100MB #1024*1024*100
+        backupCount: 50
+        encoding: utf8
+
+    timeRotateFileHandle: # 根据时间拆分log
+        class: logging.handlers.TimedRotatingFileHandler
+        level: DEBUG
+        formatter: pycharmFormat
+        filename: ${time_rotate_file_name}
+        when: D # 每天夜里
+        backupCount: 50
+        encoding: utf8
+
+loggers:
+    ${app.name}: #自定义解析
+        level: ${app.level}
+        handlers: [ consoleHandle,rotateFileHandle,timeRotateFileHandle ]
+        propagate: false    # 日志向上传递，不仅在myapp中记录，也会在父logger中记录
+
+    sqlalchemy:
+        level: DEBUG
+        handlers: [ consoleHandle,rotateFileHandle,timeRotateFileHandle ]
+        propagate: false    # 日志向上传递，不仅在myapp中记录，也会在父logger中记录
+
+    werkzeug:
+        level: WARNING
+        handlers: [ consoleHandle,rotateFileHandle,timeRotateFileHandle ]
+        propagate: false    # 日志向上传递，不仅在myapp中记录，也会在父logger中记录
+
+root:
+    level: WARNING
+    handlers: [ consoleHandle ]

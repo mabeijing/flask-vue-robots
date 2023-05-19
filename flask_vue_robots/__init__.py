@@ -15,8 +15,9 @@ app.config.from_object(config.DevelopConfig)
 log_config = {
     "time_rotate_file_name": settings.ROOT.joinpath("logs", "run.log"),
     "app.name": app.name,
-    "app.level": "ERROR"
+    "app.level": "DEBUG"
 }
+
 logging_init_app(app, settings.ROOT.joinpath("logging.yaml"), kwargs=log_config)
 celery_init_app(app)
 app.register_blueprint(bp_l10n)

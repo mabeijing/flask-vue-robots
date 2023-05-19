@@ -1,5 +1,5 @@
 version: 1
-disable_existing_loggers: false
+disable_existing_loggers: false # 是否禁用已存在的logger
 formatters:
     default:
         format: "[%(asctime)-40s] - [%(name)40s] - %(levelname)s - %(message)s" # 注意左对齐和右对齐，
@@ -30,7 +30,7 @@ handlers:
         mode: "a+"
         level: ERROR
         formatter: pycharmFormat
-        filename: ./flask_vue_robots/logs/error.log    # 就是在启动项目的文件夹的相对路径
+        filename: ./logs/error.log    # 就是在启动项目的文件夹的相对路径
         maxBytes: 104857600 # 100MB #1024*1024*100
         backupCount: 50
         encoding: utf8

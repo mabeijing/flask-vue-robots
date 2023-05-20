@@ -14,6 +14,7 @@ def rules():
 @bp_l10n.get("/add_rule/<rule_name>")
 def add_rule(rule_name):
     tf_user = TBUser(username=rule_name, email='58149278@qq.com')
-    db.session.add(tf_user)
-    db.session.commit()
+
+    with db.auto_commit():
+        db.session.add(tf_user)
     return "OK"

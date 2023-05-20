@@ -1,8 +1,11 @@
-from flask import Flask
+import uuid
+
+from flask import Flask, g
 from l10n import bp_l10n
+from flask_vue_robots.auth import bp_user
 
 from tasks import celery_init_app
-from flask_vue_robots.extension import logging_init_app
+from flask_vue_robots.extension import logging_init_app, sqlalchemy_init_app
 from flask_vue_robots import config
 from flask_vue_robots.orm import db
 
@@ -21,8 +24,16 @@ log_config = {
 }
 
 logging_init_app(app, settings.ROOT.joinpath("logging.yaml"), kwargs=log_config)
+sqlalchemy_init_app(app)
 celery_init_app(app)
 app.register_blueprint(bp_l10n)
+app.register_blueprint(bp_user)
+
+
+@app.before_request
+def before_request():
+    g.trace_id = str(uuid.uuid4())
+
 
 with app.app_context():
     db.create_all()
@@ -32,35 +43,3 @@ with app.app_context():
 def index():
     app.logger.info("dcsdcsc")
     return "welcome to Hello World!"
-
-
-@app.get("/run")
-def run():
-    pass
-
-
-from .models import User
-
-
-@app.get("/add_user")
-def add_user():
-    from sqlalchemy.engine import create_engine
-    from sqlalchemy.orm import Session
-    from sqlalchemy import URL
-
-    url_object = URL.create(
-        "mysql+pymysql",
-        username="root",
-        password="root@123",
-        host="localhost",
-        port=3306,
-        database="flask-vue-robots",
-    )
-    engine = create_engine(url_object, pool_recycle=3600, echo=True)
-
-    session = Session(engine)
-
-    user = User(name="beijing", fullname="mabeijing")
-    session.add(user)
-    session.commit()
-    return "OK"

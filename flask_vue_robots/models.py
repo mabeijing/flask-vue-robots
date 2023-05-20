@@ -6,6 +6,8 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import sessionmaker, scoped_session, Session
+
 
 
 class Base(DeclarativeBase):

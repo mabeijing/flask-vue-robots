@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from sqlalchemy.engine import create_engine
-from sqlalchemy.orm import Session, sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy import URL
 
 if TYPE_CHECKING:
@@ -16,8 +16,8 @@ url_object = URL.create(
     database="flask-vue-robots",
 )
 
-engine = create_engine(url_object, pool_recycle=3600, echo=True)
-
 
 def sqlalchemy_init_app(app: "Flask"):
-    pass
+    engine = create_engine(url_object, pool_recycle=3600, echo=True, pool_size=10)
+
+    app.extensions['sessionmaker'] = sessionmaker(engine)

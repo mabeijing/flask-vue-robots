@@ -26,9 +26,11 @@ celery = FlaskCelery(__name__, broker="redis://:root@123@localhost:6379/0",
 
 celery.conf.timezone = "Asia/Shanghai"
 
+# 其实是importlib.import_module(),从项目跟路径开始
 celery.conf.imports = ['tasks']
 
 celery.conf.beat_schedule = {
+    # task路径必须是可以import的
     "send_ok": {
         "task": "tasks.scheduler.send_ok",
         'schedule': crontab(minute="*/1")
@@ -36,6 +38,7 @@ celery.conf.beat_schedule = {
 }
 
 
+# 这里的可以直接扫描成task
 @celery.task(bind=True)
 def demo_task(self, x, y):
     time.sleep(4)

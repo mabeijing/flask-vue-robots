@@ -20,3 +20,4 @@ uwsgi --ini uwsgi.ini
 #sudo pkill -f uwsgi -9
 
 
+celery -A flask_vue_robots.extension.ext_celery.celery worker --loglevel=INFO -B

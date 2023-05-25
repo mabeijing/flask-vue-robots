@@ -4,7 +4,7 @@ from flask import Flask, g
 from l10n import bp_l10n
 from flask_vue_robots.auth import bp_user
 
-from tasks import celery_init_app
+from flask_vue_robots.extension import celery
 from flask_vue_robots.extension import logging_init_app, sqlalchemy_init_app
 from flask_vue_robots import config
 from flask_vue_robots.orm import db
@@ -25,7 +25,7 @@ log_config = {
 
 logging_init_app(app, settings.ROOT.joinpath("logging.yaml"), kwargs=log_config)
 sqlalchemy_init_app(app)
-celery_init_app(app)
+celery.init_app(app)
 app.register_blueprint(bp_l10n)
 app.register_blueprint(bp_user)
 

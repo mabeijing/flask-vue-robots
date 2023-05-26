@@ -68,10 +68,15 @@ def add_role():
 @bp_user.get("/login")
 def login():
     data: dict = request.json
-    register_data: dict = {
-        "username": data.get("username"),
-        "password": data.get("password")
-    }
+    user = TBUsers.query.filter(TBUsers.username == data.get("username")).first()
+    if user is None:
+        return {"code": 10404, "msg": "用户名或者密码不正确。"}
+    if user.password != data.get("password"):
+        return {"code": 10404, "msg": "用户名或者密码不正确。"}
+
+    session["user_id"] = user.user_id
+    return {"code": 200, "msg": user.to_dict()}
+
 
 @bp_user.post("/register")
 def register():
@@ -87,3 +92,17 @@ def register():
     TBUsers(**register_data).save()
     u: TBUsers = TBUsers.query.filter(TBUsers.username == data.get("username")).first()
     return u.to_dict()
+
+@bp_user.post("/edit/<int:user_id>")
+def edit(user_id:int):
+    user = TBUsers.query.filter(TBUsers.user_id == user_id).first()
+    if user is None:
+        return {"code": 10405, "msg": "用户不存在"}
+
+    if  session.get("user_id") != user_id:
+        return {"code": 10456, "msg": "用户未授权"}
+
+    user.email = "beijingm@vmware.com"
+    user.save()
+
+    return user.to_dict()

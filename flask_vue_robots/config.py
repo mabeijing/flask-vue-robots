@@ -52,6 +52,12 @@ class DevelopConfig(AbstractConfig):
             port=3306,
             database="tms_db")
     }
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_size': 5,
+        'pool_timeout': 90,
+        'pool_recycle': 7200,
+        'max_overflow': 1024
+    }
 
     CELERY_BROKER_URL = "redis://localhost:6379/0"
     CELERY_RESULT_BACKEND = "redis://localhost:6379/0"

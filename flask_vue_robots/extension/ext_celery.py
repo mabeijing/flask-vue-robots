@@ -33,7 +33,7 @@ celery.conf.beat_schedule = {
     # task路径必须是可以import的
     "send_ok": {
         "task": "tasks.scheduler.send_ok",
-        'schedule': crontab(minute="*/1")
+        'schedule': crontab(minute="*/5")
     }
 }
 

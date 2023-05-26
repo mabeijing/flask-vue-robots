@@ -15,12 +15,10 @@ def send_report(self, x, y):
 
 @celery.task(bind=True)
 def create_user(self, username):
-    with self.app.flask_app.app_context():
-        tf_user = TBUser(username=username, email='58149278@qq.com')
-
+    tf_user = TBUser(username=username, email='58149278@qq.com')
+    with self.app.flask_app.app_context():  # 涉及数据库操作的，需要在app_context()上下文中，操作模型无需在上下文
         with db.auto_commit():
             db.session.add(tf_user)
-
 
         user = TBUser.query.first()
     if user:
